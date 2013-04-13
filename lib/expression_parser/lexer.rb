@@ -10,8 +10,8 @@ module ExpressionParser
 
     def get_next_token
       if @return_previous_token
-	@return_previous_token = false
-	return @previous_token
+        @return_previous_token = false
+        return @previous_token
       end
 
       token = Token.new
@@ -20,53 +20,65 @@ module ExpressionParser
 
       case @input
       when /\A\+/ then
-	token.kind = Token::Plus
+        token.kind = Token::Plus
+        token.value = '+'
       when /\A-/ then
-	token.kind = Token::Minus
+        token.kind = Token::Minus
+        token.value = '-'
       when /\A\*/ then
-	token.kind = Token::Multiply
+        token.kind = Token::Multiply
       when /\Adiv/ then
-	token.kind = Token::Divide
+        token.kind = Token::Divide
       when /\A\// then
-	token.kind = Token::Divide
+        token.kind = Token::Divide
       when /\A\d+(\.\d+)?/
-	token.kind = Token::Number
-	token.value = $&.to_f
+        token.kind = Token::Number
+        token.value = $&.to_f
       when /\A\(/
-	token.kind = Token::LParen
+        token.kind = Token::LParen
       when /\A\)/
-	token.kind = Token::RParen
+        token.kind = Token::RParen
       when ''
-	token.kind = Token::End
+        token.kind = Token::End
       when /\Ae/
-	token.kind = Token::Number
-	token.value = 2.718281828459
+        token.kind = Token::Number
+        token.value = 2.718281828459
       when /\Api/
-	token.kind = Token::Number
-	token.value = 3.1415926535898
+        token.kind = Token::Number
+        token.value = 3.1415926535898
       when /\Amod/
-	token.kind = Token::MOD
+        token.kind = Token::MOD
       when /\A!=/
-	token.kind = Token::NotEqual
+        token.kind = Token::NotEqual
       when /\A<>/
-	token.kind = Token::NotEqual
+        token.kind = Token::NotEqual
       when /\A>=/
-	token.kind = Token::GThanE
+        token.kind = Token::GThanE
       when /\A>/
-	token.kind = Token::GThan
+        token.kind = Token::GThan
       when /\A<=/
-	token.kind = Token::LThanE
+        token.kind = Token::LThanE
       when /\A</
-	token.kind = Token::LThan
+        token.kind = Token::LThan
       when /\A=/
-	token.kind = Token::Equal
+        token.kind = Token::Equal
       end
 
       raise "Unknown token #{@input}" if token.unknown?
       @input = $'
 
+      tokens << token
+
       @previous_token = token
       token
+    end
+
+    def tokens
+      @tokens ||= []
+    end
+
+    def previous_token
+      tokens[-2]
     end
 
     def revert

@@ -72,7 +72,7 @@ describe Parser do
 
   it 'should raise an error on syntax error' do
     lambda {@parser.parse(' 5 + + 6')}.should raise_error()
-    lambda {@parser.parse(' -5 + 2')}.should raise_error()
+    lambda {@parser.parse(' -5 + 2')}.should_not raise_error()
   end
 
   it 'should return Infinity when attempt to divide by zero occurs' do
@@ -104,6 +104,15 @@ describe Parser do
     lambda {@parser.parse('(((((4))))')}.should raise_error()
     lambda {@parser.parse('((2)) * ((3')}.should raise_error()
     lambda {@parser.parse('((9)) * ((1)')}.should raise_error()
+  end
+
+  it 'should handle numbers with signs' do
+    @parser.parse('-5').should == -5
+    @parser.parse('-1*(3+7)').should == -10
+    @parser.parse('-5*3').should == -15
+    @parser.parse('-4+10').should == 6
+    @parser.parse('(-2+6)*(-2*2)').should == -16
+    @parser.parse('+4 -3').should == 1
   end
 
   it 'should return 1 for 2>1' do
