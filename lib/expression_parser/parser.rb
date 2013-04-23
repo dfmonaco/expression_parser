@@ -30,7 +30,7 @@ module ExpressionParser
       when Token::LThanE
         expression_value <= expression ? 1 : 0
       else
-        raise 'End expected'
+        raise ExpressionParser::EndExpectedError, 'End expected'
       end
     end
 
@@ -94,7 +94,10 @@ module ExpressionParser
           expected_rparen = @lexer.get_next_token
         end
         expected_rparen
-        raise "Unbalanced parenthesis" unless expected_rparen.kind == Token::RParen
+
+        unless expected_rparen.kind == Token::RParen
+          raise ExpressionParser::UnbalancedParenthesisError, "Unbalanced parenthesis"
+        end
 
       elsif token.kind == Token::Number
         value = token.value
@@ -104,11 +107,11 @@ module ExpressionParser
         if next_token.kind == Token::Number
           value = "#{token.value}#{next_token.value}".to_f
         else
-          raise 'Not a number'
+          raise ExpressionParser::ExpressionSyntaxError, 'Not a number'
         end
 
       else
-        raise 'Not a number'
+        raise ExpressionParser::ExpressionSyntaxError, 'Not a number'
       end
 
       value

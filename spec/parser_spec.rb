@@ -19,7 +19,7 @@ describe Parser do
   end
 
   it 'should raise an error when input is empty' do
-    lambda {@parser.parse('')}.should raise_error()
+    lambda {@parser.parse('')}.should raise_error(ExpressionSyntaxError)
   end
 
   it 'should omit white spaces' do
@@ -71,8 +71,7 @@ describe Parser do
   end
 
   it 'should raise an error on syntax error' do
-    lambda {@parser.parse(' 5 + + 6')}.should raise_error()
-    lambda {@parser.parse(' -5 + 2')}.should_not raise_error()
+    lambda {@parser.parse(' 5 + + 6')}.should raise_error(ExpressionSyntaxError)
   end
 
   it 'should return Infinity when attempt to divide by zero occurs' do
@@ -100,10 +99,10 @@ describe Parser do
   end
 
   it 'should raise an error on unbalanced parenthesis' do
-    lambda {@parser.parse('2 + (5 * 2')}.should raise_error()
-    lambda {@parser.parse('(((((4))))')}.should raise_error()
-    lambda {@parser.parse('((2)) * ((3')}.should raise_error()
-    lambda {@parser.parse('((9)) * ((1)')}.should raise_error()
+    lambda {@parser.parse('2 + (5 * 2')}.should raise_error(UnbalancedParenthesisError)
+    lambda {@parser.parse('(((((4))))')}.should raise_error(UnbalancedParenthesisError)
+    lambda {@parser.parse('((2)) * ((3')}.should raise_error(UnbalancedParenthesisError)
+    lambda {@parser.parse('((9)) * ((1)')}.should raise_error(UnbalancedParenthesisError)
   end
 
   it 'should handle numbers with signs' do
