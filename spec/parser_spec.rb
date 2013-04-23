@@ -65,9 +65,9 @@ describe Parser do
   end
 
   it 'should raise an error on wrong token' do
-    lambda {@parser.parse('  6 + c')}.should raise_error()
-    lambda {@parser.parse('  7 &amp; 2')}.should raise_error()
-    lambda {@parser.parse('  %')}.should raise_error()
+    lambda {@parser.parse('  6 + c')}.should raise_error(UnknownTokenError, 'Unknown token c')
+    lambda {@parser.parse('  7 &amp; 2')}.should raise_error(UnknownTokenError, 'Unknown token &amp; 2')
+    lambda {@parser.parse('  %')}.should raise_error(UnknownTokenError, 'Unknown token %')
   end
 
   it 'should raise an error on syntax error' do

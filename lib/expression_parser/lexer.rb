@@ -64,7 +64,10 @@ module ExpressionParser
         token.kind = Token::Equal
       end
 
-      raise "Unknown token #{@input}" if token.unknown?
+      if token.unknown?
+        raise ExpressionParser::UnknownTokenError, "Unknown token #{@input}"
+      end
+
       @input = $'
 
       tokens << token
